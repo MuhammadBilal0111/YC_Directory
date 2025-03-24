@@ -1,0 +1,99 @@
+you cannot pass server actions to the onclick={}
+But the server action works with the new Form features in React 19
+You can pass a server actions to a Form to automatically submit the form to the server
+
+while configuration with sanity 
+check this ===> Select project template to use Clean project with no predefined schema types
+
+client.ts in sanity folder is sanity read client use for fetching data through queries
+useCDN:false cache data for 60 sec after req
+
+GROQ is the query lanaguage of sanity for data retrieval and manipulation
+* in query of vision tab means give me everything
+*[0] give first property
+*[_type == "startup"] give me all startup (give reference to author info)
+*[type == "startup" && defined(slug.current)]
+i.e. defined(slug.current) slug cannot be null
+
+// give Selected info about the object 
+*[_type == "startup" && defined(slug.current)]{
+  _id, title, slug, _createdAt , author, views, decsription, category, image
+}
+
+// give additional info about the author
+*[_type == "startup" && defined(slug.current)]{
+  _id,
+  title,
+  slug,
+  _createdAt ,
+  author -> {_id, name, image, bio},
+  views,
+  decsription,
+  category,
+  image
+}
+
+To extract the schema use this command
+npx sanity@latest schema extract --path=./sanity/extract.json
+
+sanity-typegen.json -- create this file in root
+
+check this website: https://www.sanity.io/learn/course/content-driven-web-application-foundations/generate-typescript-types#s-7cd40049889f
+
+useCDN:true cache data for 60 sec after req // This is ISR incremental static regeneration
+sanity cache the sata for 60 sec and then revalidate after 60 seconds
+
+Caching in nextJS
+
+1. first make an uncache request of fetching data and set revalidation time
+2. first find the existing data in data cache if the data is missing in cache then go to actual source and get the data and set the data in cache
+if less than 60 second pass then you make the cache request
+if more than 60 second pass then you make the stale request and make cache data stale and then revalidate(access  data from source and set in cache and get the data with setting revalidate time) the data
+
+after 60 seconds it will give you the actual data
+
+
+for real time data retrieving useCDN:false get latest data on refresh immediately
+Live COntent API is use to get the fresh data without refreshing the page
+npm i server-only is used when we want to download the specific module to run only on server
+
+
+Partial Prerendering
+static content revalidated after some time but cart and recommended product must be dynamic
+to use PPR write this in net config file
+These help to visualize what iis happening in PPR
+experimental: {
+  ppr: "incremental",
+},
+devIndicators: {
+  appIsrStatus: true,
+  buildActivity: true,
+  buildActivityPosition: "bottom-right",
+},
+export const experimental_ppr = true; use  where you want to add PPR
+use sanity client APi to form ISR(incremental static regeneration)
+
+To make something dynamic in ppr use <Suspense fallbackk={loader}></suspense>
+
+unstable after is basically use for unblocking operation means that execute the operation in th ebackground without blocking the ui executon of blocking the rendering 
+ after(
+    async () =>
+      await writeClient
+        .patch(id)
+        .set({ views: totalViews + 1 })
+        .commit()
+  );
+
+use after() for update in the background
+
+when the user is not sign up then sanity create the acount but as soon as we make requestto access the data with 60s the nextjs and sanity cache is not updated then they give us undefine
+
+<Button className="startup-card_btn" asChild>
+  <Link href={`/startup/${_id}`}>Details</Link>
+</Button>
+
+The & operator in TypeScript merges two types together.
+<article dangerouslySetInnerHTML={{ __html: parsedContent }} /> setting the tags as HTML b/c React treat the special character as text to avoid XSS
+
+
+

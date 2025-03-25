@@ -95,5 +95,4 @@ when the user is not sign up then sanity create the acount but as soon as we mak
 The & operator in TypeScript merges two types together.
 <article dangerouslySetInnerHTML={{ __html: parsedContent }} /> setting the tags as HTML b/c React treat the special character as text to avoid XSS
 
-
-
+useActionState() is better than useFormState()

@@ -7,13 +7,67 @@ import { Toast } from "./ui/toast";
 import { Button } from "./ui/button";
 import { Send } from "lucide-react";
 import { useActionState } from "react";
+import { z } from "zod";
+import { formSchema } from "@/lib/validations";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 function StartupForm() {
   const [errors, setErrors] = useState<Record<string, string>>({}); // string in errors object
   const [pitch, setPitch] = useState("");
-  const isPending = false;
+  const router = useRouter();
+  const { toast } = useToast();
+
+  // action
+  const handleFormSubmit = async (prevState: any, formData: FormData) => {
+    try {
+      const formValues = {
+        title: formData.get("title") as string,
+        description: formData.get("description") as string,
+        category: formData.get("category") as string,
+        link: formData.get("link") as string,
+        pitch,
+      };
+      await formSchema.parseAsync(formValues);
+      // if (result.status === "SUCCESS") {
+      //   toast({
+      //     title: "Success",
+      //     description: "Your startup pitch has been created successfully!",
+      //   });
+      // }
+      // router.push(`/startup/${result.id}`);
+      console.log(formValues);
+    } catch (error: any) {
+      if (error instanceof z.ZodError) {
+        const fieldsError = error.flatten().fieldErrors; // .flatten transformm the errors in array
+        console.log("fieldsError", fieldsError);
+        setErrors(fieldsError as unknown as Record<string, string>);
+        toast({
+          title: "Error",
+          description: "Please check your input and try again",
+          variant: "destructive",
+        });
+        return { ...prevState, error: "Validation Failed", status: "Error" };
+      }
+      toast({
+        title: "Error",
+        description: "An unexpected Error Occured",
+        variant: "destructive",
+      });
+      return {
+        ...prevState,
+        error: "An unexpected Error Occured",
+        status: "ERROR",
+      };
+    }
+  };
+  const [state, formAction, isPending] = useActionState(handleFormSubmit, {
+    error: "",
+    status: "INITIAL",
+  });
+
   return (
-    <form className="startup-form">
+    <form action={formAction} className="startup-form">
       <div>
         <label htmlFor="title" className="startup-form_label">
           Title

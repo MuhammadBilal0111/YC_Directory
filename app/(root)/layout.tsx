@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "@/components/Navbar";
+import { Toaster } from "@/components/ui/toaster";
 
 function layout({
   children,
@@ -9,7 +10,10 @@ function layout({
   return (
     <div className="font-work-sans">
       <Navbar />
-      <main>{children}</main>
+      <main>
+        <Toaster />
+        {children}
+      </main>
     </div>
   );
 }

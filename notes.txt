@@ -96,3 +96,10 @@ The & operator in TypeScript merges two types together.
 <article dangerouslySetInnerHTML={{ __html: parsedContent }} /> setting the tags as HTML b/c React treat the special character as text to avoid XSS
 
 useActionState() is better than useFormState()
+action in useActionState() is similar to handleSubmit()
+
+pass formAction as action in form
+
+useActionState() server rese the form
+
+parseAsync() is used to parse the form object

@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import MDEditor from "@uiw/react-md-editor";
-import { Toast } from "./ui/toast";
 import { Button } from "./ui/button";
 import { Send } from "lucide-react";
 import { useActionState } from "react";
@@ -11,6 +10,7 @@ import { z } from "zod";
 import { formSchema } from "@/lib/validations";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { createPitch } from "@/lib/actions/action";
 
 function StartupForm() {
   const [errors, setErrors] = useState<Record<string, string>>({}); // string in errors object
@@ -29,13 +29,15 @@ function StartupForm() {
         pitch,
       };
       await formSchema.parseAsync(formValues);
-      // if (result.status === "SUCCESS") {
-      //   toast({
-      //     title: "Success",
-      //     description: "Your startup pitch has been created successfully!",
-      //   });
-      // }
-      // router.push(`/startup/${result.id}`);
+      const result = await createPitch(prevState, formData, pitch);
+
+      if (result.status === "SUCCESS") {
+        toast({
+          title: "Success",
+          description: "Your startup pitch has been created successfully!",
+        });
+      }
+      router.push(`/startup/${result?._id}`);
       console.log(formValues);
     } catch (error: any) {
       if (error instanceof z.ZodError) {

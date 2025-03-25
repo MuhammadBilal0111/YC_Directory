@@ -103,3 +103,29 @@ pass formAction as action in form
 useActionState() server rese the form
 
 parseAsync() is used to parse the form object
+
+Type casting is used here to trick TypeScript into treating it as Record<string, string>:
+
+as unknown first makes TypeScript forget the original type.
+
+as Record<string, string> then reinterprets it as a new type.
+
+
+// object.enteries() use case
+const fieldsError = {
+  email: ["Invalid email format"],
+  password: ["Password is too short"],
+  pitch: ["Pitch must be at least 200 words"],
+  name: ["Name is required"]
+};
+Now, let's convert this object into an array of key-value pairs:
+
+const entries = Object.entries(fieldsError);
+console.log(entries);
+Output:
+[
+  ["email", ["Invalid email format"]],
+  ["password", ["Password is too short"]],
+  ["pitch", ["Pitch must be at least 200 words"]],
+  ["name", ["Name is required"]]
+]

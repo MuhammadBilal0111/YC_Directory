@@ -129,3 +129,18 @@ Output:
   ["pitch", ["Pitch must be at least 200 words"]],
   ["name", ["Name is required"]]
 ]
+Important
+This structure ensures React treats it as a Server Component properly in Next.js.
+React Server Components (RSCs) support async functions only when defined as arrow functions.
+
+<ul>Cards</ul>
+
+Parallel and sequential data fetching
+
+There are two types of fetching Parallel and sequential data fetching
+
+in Parallel fetching fetch one thing for all pages and then slowing fetching, it takes much less time
+Sequential Feching: Request in Component tree is dependent on each other, cause longer loading time
+Parallel fetching: eagerly initiated and load data at same times
+
+use Promise.all() for Parallel fetching

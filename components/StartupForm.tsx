@@ -38,11 +38,11 @@ function StartupForm() {
         });
       }
       router.push(`/startup/${result?._id}`);
-      console.log(formValues);
+      
     } catch (error: any) {
       if (error instanceof z.ZodError) {
         const fieldsError = error.flatten().fieldErrors; // .flatten transformm the errors in array
-        console.log("fieldsError", fieldsError);
+        
         setErrors(fieldsError as unknown as Record<string, string>);
         toast({
           title: "Error",
